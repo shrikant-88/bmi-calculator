@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMI Calculator</title>
+    <style>
+        body {
+            text-align: center;
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+        }
+
+        .head {
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            border: 2px black solid;
+            background-color: #333;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .head #text {
+            width: 100%;
+            margin-left: 10px;
+        }
+
+        #text h1 {
+            color: aliceblue;
+            margin: 0;
+        }
+
+        .img {
+            height: 50px;
+            width: 85px;
+            border-radius: 50%;
+            background-image: url('/bmiImg.jpeg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            border: 2px solid #fff;
+        }
+
+        .body {
+            height: 750px;
+            width: auto;
+            background-image: url('/bmi-img.jpg');
+            object-fit: cover;
+            background-size:contain;
+            /* background-position: center; */
+            background-repeat: repeat;
+            position: relative;
+            z-index: 0;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .form {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            margin-top: 20px;
+        }
+
+        .height, .weight {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .height #h, .weight #w {
+            width: 70px;
+            font-size: larger;
+            font-weight: 700;
+        }
+
+        #H, #W {
+            height: 30px;
+            width: 100%;
+            padding: 5px;
+            box-sizing: border-box;
+            border: 2px greenyellow solid;
+            border-radius: 5px;
+            margin-top: 5px;
+        }
+
+        #unit {
+            margin-top: 10px;
+        }
+
+        .sub-btn {
+            margin-top: 20px;
+            height: 40px;
+            width: 160px;
+            font-size: larger;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            border-radius: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .sub-btn:hover {
+            background-color: #45a049;
+        }
+
+        .result {
+            text-align: center;
+            margin-top: 20px;
+            color: #333;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+        .status {
+            text-align: center;
+            margin-top: 20px;
+            color: #333;
+            padding: 20px;
+            background-color: rgba(169, 237, 225, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .status h1 {
+            display: inline;
+            margin: 0;
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        .status h1.underweight {
+            color: #3498db;
+            background-color: #e74c3c;
+        }
+
+        .status h1.normal {
+            color: #2ecc71;
+            background-color: #e67e22;
+        }
+
+        .status h1.overweight {
+            color: #e74c3c;
+            background-color: #3498db;
+        }
+
+        .status h1.obese {
+            color: #e67e22;
+            background-color: #3498db;
+        }
+
+        .status h1.extremely-obese {
+            color: #e74c3c;
+            background-color: #27ae60;
+        }
+
+        .status h1.invalid {
+            color: #e74c3c;
+            background-color: #ecf0f1;
+        }
+
+        @media only screen and (max-width: 600px) {
+            .head {
+                flex-direction: column;
+            }
+            .head #text {
+                width: 100%;
+                margin-left: 0;
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="head">
+        <div class="img"></div>
+        <div id="text"><h1>BMI CALCULATOR</h1></div>
+    </div>
+    <div class="body">
+        <div class="form">
+            <div class="height">
+                <div id="h">Height</div>
+                <div><input id="H" placeholder="Enter height" type="text"></div>
+                <div id="unit">
+                    <input type="radio" name="unit" id="cm" checked>
+                    <label for="cm">cm</label>
+                    <input type="radio" name="unit" id="inches">
+                    <label for="inches">inches</label>
+                </div>
+            </div>
+            <div class="weight">
+                <div id="w">Weight</div>
+                <div><input id="W" type="text" placeholder="Enter weight (in kg)"></div>
+            </div>
+            <button type="button" onclick="result();" class="sub-btn">Calculate</button>
+        </div>
+        <div class="result"></div>
+        <div class="status"></div>
+    </div>
+    <script>
+        let he = '';
+        let we = '';
+        let unit = 'cm';
+
+        function height() {
+            let height = document.querySelector('#H');
+            he = parseFloat(height.value);
+            height.value = '';
+            return he;
+        }
+
+        function weight() {
+            let weight = document.querySelector('#W');
+            we = parseFloat(weight.value);
+            weight.value = '';
+            return we;
+        }
+
+        function bmi() {
+            let h = height();
+            if (unit === 'inches') {
+                // Convert inches to cm
+                h *= 2.54;
+            }
+            let w = weight();
+            return (w / (h * h)) * 10000;
+        }
+
+        let html = document.querySelector('.result');
+        let statusHtml = document.querySelector('.status');
+
+        function result() {
+            unit = document.querySelector('input[name="unit"]:checked').id;
+            let BMI = bmi();
+
+            if (!isNaN(BMI)) {
+                html.innerHTML = `
+                    <div>
+                        <hr>
+                        <h3>Height: ${he} ${unit}</h3>
+                        <h3>Weight: ${we} kg</h3>
+                        <h2 style="color: #e74c3c;">Your BMI: ${Math.round(BMI * 10) / 10}</h2>
+                    </div>
+                `;
+
+                if (BMI < 18.5) {
+                    statusHtml.innerHTML = `<hr> <h1 class="underweight">Underweight</h1> <hr> `;
+                } else if (BMI >= 18.5 && BMI < 25) {
+                    statusHtml.innerHTML = `<hr> <h1 class="normal">Normal</h1> <hr>`;
+                } else if (BMI >= 25 && BMI < 30) {
+                    statusHtml.innerHTML = `<hr> <h1 class="overweight">Overweight</h1> <hr>`;
+                } else if (BMI >= 30 && BMI < 35) {
+                    statusHtml.innerHTML = `<hr> <h1 class="obese">Obese</h1> <hr>`;
+                } else if (BMI >= 35) {
+                    statusHtml.innerHTML = `<hr> <h1 class="extremely-obese">Extremely Obese</h1> <hr>`;
+                }
+            } else {
+                he = 0;
+                we = 0;
+                html.innerHTML = `
+                    <div>
+                        <hr>
+                        <h3>Height: ${he} ${unit}</h3>
+                        <h3>Weight: ${we} kg</h3>
+                        <h2>Your BMI: _______</h2>
+                        <hr>
+                    </div>
+                `;
+
+                statusHtml.innerHTML = `<h1 class="invalid">Invalid data</h1>`;
+            }
+        }
+    </script>
+</body>
+</html>
